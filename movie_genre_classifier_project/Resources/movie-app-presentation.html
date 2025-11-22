@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Genre Classification System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.6s ease-out;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-title {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .slide-subtitle {
+            font-size: 1.5em;
+            color: #666;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .hero-icon {
+            font-size: 8em;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .feature-description {
+            font-size: 0.95em;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .workflow-section {
+            margin-top: 40px;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8f9ff;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .workflow-step:hover {
+            background: #eef1ff;
+            transform: translateX(10px);
+        }
+
+        .step-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-right: 30px;
+            min-width: 60px;
+        }
+
+        .step-content h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .step-content p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 35px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .tech-item {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 15px;
+            min-width: 150px;
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            background: #eef1ff;
+            transform: scale(1.05);
+        }
+
+        .tech-logo {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+        }
+
+        .tech-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .benefits-list {
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .benefits-list li {
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 1.1em;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .benefits-list li:hover {
+            background: #eef1ff;
+            transform: translateX(10px);
+        }
+
+        .benefits-list li::before {
+            content: "✓";
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 50px;
+            font-size: 1.3em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .screenshot-placeholder {
+            background: #f0f0f0;
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 60px;
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            background: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            color: #667eea;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+                min-height: auto;
+            }
+            
+            .slide-title {
+                font-size: 2em;
+            }
+            
+            .hero-icon {
+                font-size: 5em;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .workflow-step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-number {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-counter" id="slideCounter">Slide 1 of 8</div>
+    
+    <div class="presentation-container" id="presentation">
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <div class="hero-section">
+                <div class="hero-icon">🎬</div>
+                <h1 class="slide-title">Movie Genre Classification System</h1>
+                <p class="slide-subtitle">Intelligent Movie Analysis & Classification Platform</p>
+                <p style="color: #888; font-size: 1.1em; margin-top: 20px;">Powered by OMDb API & Machine Learning</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Problem Statement -->
+        <div class="slide">
+            <h2 class="slide-title">The Challenge</h2>
+            <div class="workflow-section">
+                <div class="workflow-step">
+                    <div class="step-number">❌</div>
+                    <div class="step-content">
+                        <h3>Manual Movie Organization</h3>
+                        <p>Managing large movie collections is time-consuming and inefficient</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">❌</div>
+                    <div class="step-content">
+                        <h3>Scattered Information</h3>
+                        <p>Movie data exists across multiple platforms without centralized analysis</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">❌</div>
+                    <div class="step-content">
+                        <h3>Limited Insights</h3>
+                        <p>Difficulty in understanding genre trends and rating patterns</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">❌</div>
+                    <div class="step-content">
+                        <h3>No Batch Processing</h3>
+                        <p>Analyzing multiple movies requires repetitive manual searches</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Solution Overview -->
+        <div class="slide">
+            <h2 class="slide-title">Our Solution</h2>
+            <p class="slide-subtitle">Automated, Intelligent, Comprehensive</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <div class="feature-title">Smart Search</div>
+                    <div class="feature-description">Instant movie lookup with comprehensive details from OMDb database</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Batch Processing</div>
+                    <div class="feature-description">Classify hundreds of movies simultaneously with automated workflows</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Visual Analytics</div>
+                    <div class="feature-description">Interactive charts and statistics for genre distribution and ratings</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <div class="feature-title">Export Options</div>
+                    <div class="feature-description">Download results in CSV, Excel, or JSON formats</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-title">Accurate Classification</div>
+                    <div class="feature-description">Precise genre identification with detailed metadata</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <div class="feature-title">User-Friendly</div>
+                    <div class="feature-description">Intuitive interface requiring zero technical knowledge</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: How It Works -->
+        <div class="slide">
+            <h2 class="slide-title">How It Works</h2>
+            <p class="slide-subtitle">Simple 4-Step Process</p>
+            <div class="workflow-section">
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Input Movies</h3>
+                        <p>Enter movie titles manually, upload a file, or search individually. Supports .txt, .csv, and .xlsx formats.</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Automated Retrieval</h3>
+                        <p>System queries OMDb API to fetch comprehensive movie information including genre, ratings, plot, and release year.</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Analysis & Classification</h3>
+                        <p>Advanced algorithms process and classify movies, generating detailed statistics and identifying patterns.</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>View & Export</h3>
+                        <p>Browse interactive results with visualizations and export data in your preferred format for further use.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Key Features -->
+        <div class="slide">
+            <h2 class="slide-title">Key Features</h2>
+            <ul class="benefits-list">
+                <li>Real-time movie search with instant results and high-quality posters</li>
+                <li>Batch classification supporting up to 100+ movies per session</li>
+                <li>Interactive genre distribution charts and rating visualizations</li>
+                <li>Comprehensive movie metadata including plot, director, and cast</li>
+                <li>Multiple input methods: manual entry, file upload, or single search</li>
+                <li>Export functionality in CSV, Excel, and JSON formats</li>
+                <li>Rating analysis with average scores by genre and year</li>
+                <li>Top-rated movies identification and ranking system</li>
+                <li>Responsive design optimized for desktop and mobile devices</li>
+                <li>No API key required from users - seamless experience</li>
+            </ul>
+        </div>
+
+        <!-- Slide 6: Technology Stack -->
+        <div class="slide">
+            <h2 class="slide-title">Technology Stack</h2>
+            <p class="slide-subtitle">Built with Modern, Reliable Technologies</p>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <div class="tech-logo">🐍</div>
+                    <div class="tech-name">Python 3.8+</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-logo">🎨</div>
+                    <div class="tech-name">Streamlit</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-logo">🐼</div>
+                    <div class="tech-name">Pandas</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-logo">📊</div>
+                    <div class="tech-name">Plotly</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-logo">🌐</div>
+                    <div class="tech-name">OMDb API</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-logo">📁</div>
+                    <div class="tech-name">OpenPyXL</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Impact & Benefits -->
+        <div class="slide">
+            <h2 class="slide-title">Impact & Benefits</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Time Saved</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Movies/Batch</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Export Formats</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Use Cases</div>
+                </div>
+            </div>
+            <div style="margin-top: 50px;">
+                <h3 style="color: #667eea; font-size: 1.8em; margin-bottom: 25px; text-align: center;">Perfect For:</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎓</div>
+                        <div class="feature-title">Researchers</div>
+                        <div class="feature-description">Film studies and data analysis</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📚</div>
+                        <div class="feature-title">Libraries</div>
+                        <div class="feature-description">Digital catalog management</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎥</div>
+                        <div class="feature-title">Enthusiasts</div>
+                        <div class="feature-description">Personal collection organization</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Get Started -->
+        <div class="slide">
+            <h2 class="slide-title">Get Started Today</h2>
+            <p class="slide-subtitle">Quick & Easy Installation</p>
+            <div class="workflow-section">
+                <div class="workflow-step">
+                    <div class="step-number">📥</div>
+                    <div class="step-content">
+                        <h3>Install Python</h3>
+                        <p>Download Python 3.8+ from python.org</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">📦</div>
+                    <div class="step-content">
+                        <h3>Install Dependencies</h3>
+                        <p>pip install streamlit pandas requests plotly openpyxl</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">🚀</div>
+                    <div class="step-content">
+                        <h3>Launch Application</h3>
+                        <p>streamlit run app.py</p>
+                    </div>
+                </div>
+            </div>
+            <div class="cta-section">
+                <button class="cta-button" onclick="alert('Ready to transform your movie management! 🎬\n\nFollow the installation guide to get started.')">Start Classifying Movies</button>
+                <p style="margin-top: 30px; color: #666; font-size: 1.1em;">Complete documentation included</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-button" onclick="previousSlide()">←</button>
+        <button class="nav-button" onclick="nextSlide()">→</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateSlideCounter() {
+            document.getElementById('slideCounter').textContent = `Slide ${currentSlide + 1} of ${totalSlides}`;
+        }
+
+        function showSlide(n) {
+            if (n >= totalSlides) {
+                currentSlide = 0;
+            } else if (n < 0) {
+                currentSlide = totalSlides - 1;
+            } else {
+                currentSlide = n;
+            }
+            
+            slides[currentSlide].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            updateSlideCounter();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Initialize
+        updateSlideCounter();
+    </script>
+</body>
+</html>
